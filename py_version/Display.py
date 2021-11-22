@@ -5,7 +5,7 @@ import cv2
 
 class Display(threading.Thread):
 
-    def __init__(self, img = None, real_time=True, size = (1080,720)):
+    def __init__(self, img = None, real_time=True, size = (400,400)):
         """
 
         :param img: A [[]] of size
@@ -31,10 +31,10 @@ class Display(threading.Thread):
 
         l_time = 0
         counter = 0
-
+        # TODO: not working
         while not self.stop_sig:
             self.updated.acquire()
-            if self.img is None:
+            if self.img is None :
                 self.updated.release()
                 continue
             cv2.imshow("img", self.img)
@@ -53,13 +53,16 @@ class Display(threading.Thread):
         self.stop_sig = True
 
     def update(self, img:[]):
-        while self.real_time and True:
+        while self.real_time:
             self.updated.acquire()
             if self.img is None:
                 break
-        self.updated.acquire()
+            else:
+                self.updated.release()
+        # self.updated.acquire()
         self.img = img
-        self.updated.release()
+        if self.real_time:
+            self.updated.release()
 
 
 
